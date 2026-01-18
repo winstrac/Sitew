@@ -3,187 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WINS ACCESS | SECURE TERMINAL</title>
+    <title>WINS HUB | NFT TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --cyan: #00FFCC;
-            --magenta: #FF00FF;
-            --bg: #030303;
-        }
-
+        :root { --cyan: #00FFCC; --magenta: #FF00FF; --bg: #030303; }
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-
-        body {
-            background-color: var(--bg);
-            color: #fff;
-            font-family: 'Share Tech Mono', monospace;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+        
+        body { 
+            background-color: var(--bg); 
+            color: #fff; 
+            font-family: 'Share Tech Mono', monospace; 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+            position: relative; 
         }
 
-        /* Фоновый слой */
-        #particles-js {
+        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
+        #nft-container { position: absolute; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+        /* Стиль падающих NFT */
+        .falling-nft {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+            width: 55px; 
+            height: 55px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            animation: fall linear infinite;
         }
 
-        /* Эффект сканирующей линии */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(0, 255, 204, 0.1);
-            z-index: 10;
-            animation: scanline 6s linear infinite;
+        @keyframes fall {
+            0% { transform: translateY(-15vh) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.5; }
+            85% { opacity: 0.5; }
+            100% { transform: translateY(115vh) rotate(360deg); opacity: 0; }
         }
 
-        @keyframes scanline {
-            0% { top: 0; }
-            100% { top: 100%; }
+        /* Контейнер терминала */
+        .terminal { 
+            position: relative; 
+            z-index: 5; 
+            width: 90%; 
+            max-width: 400px; 
+            background: rgba(0, 0, 0, 0.92); 
+            border: 1px solid var(--cyan); 
+            border-radius: 10px; 
+            padding: 40px 20px; 
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.2); 
+            text-align: center; 
+            backdrop-filter: blur(10px);
         }
 
-        /* Контейнер */
-        .terminal {
-            position: relative;
-            z-index: 5;
-            width: 90%;
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--cyan);
-            border-radius: 5px;
-            padding: 40px 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2), inset 0 0 10px rgba(0, 255, 204, 0.1);
-            text-align: center;
+        .glitch { 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 2.5rem; 
+            font-weight: bold; 
+            color: var(--cyan); 
+            letter-spacing: 5px; 
+            margin-bottom: 30px; 
+            text-shadow: 2px 0 0 var(--magenta), -2px -1px 0 var(--cyan); 
+            animation: glitch 1.5s infinite; 
+        }
+        
+        @keyframes glitch { 
+            0% { text-shadow: 2px 0 0 var(--magenta), -2px -1px 0 var(--cyan); } 
+            50% { text-shadow: -2px 0 0 var(--magenta), 2px 1px 0 var(--cyan); } 
+            100% { text-shadow: 2px -1px 0 var(--magenta), -2px 0 0 var(--cyan); } 
         }
 
-        /* Глитч заголовок */
-        .glitch {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: var(--cyan);
-            letter-spacing: 5px;
-            margin-bottom: 30px;
-            position: relative;
-            text-shadow: 0.05em 0 0 var(--magenta), -0.025em -0.05em 0 var(--cyan);
-            animation: glitch 1s infinite;
+        .nav-link { 
+            display: block; 
+            margin: 15px 0; 
+            padding: 18px; 
+            text-decoration: none; 
+            color: var(--cyan); 
+            border: 1px solid var(--cyan); 
+            border-radius: 6px; 
+            font-size: 1.1rem; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            transition: 0.3s; 
+            background: rgba(0, 255, 204, 0.05); 
+            cursor: pointer;
         }
 
-        @keyframes glitch {
-            0% { text-shadow: 1px 0 0 var(--magenta), -1px -1px 0 var(--cyan); }
-            50% { text-shadow: -1px 0 0 var(--magenta), 1px 1px 0 var(--cyan); }
-            100% { text-shadow: 1px -1px 0 var(--magenta), -1px 0 0 var(--cyan); }
+        .nav-link:hover { 
+            background: var(--cyan); 
+            color: #000; 
+            box-shadow: 0 0 40px var(--cyan); 
+            transform: scale(1.03); 
         }
 
-        /* Кнопки-неон */
-        .nav-link {
-            display: block;
-            margin: 15px 0;
-            padding: 18px;
-            text-decoration: none;
-            color: var(--cyan);
-            border: 1px solid var(--cyan);
-            border-radius: 4px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            transition: 0.3s;
-            position: relative;
-            background: rgba(0, 255, 204, 0.05);
+        .status-box { 
+            margin-top: 30px; 
+            padding: 15px; 
+            border: 1px dashed rgba(0, 255, 204, 0.4); 
+            background: rgba(0, 255, 204, 0.03); 
         }
 
-        .nav-link:hover {
-            background: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 30px var(--cyan);
-            transform: scale(1.02);
-        }
-
-        /* Блок гаранта */
-        .status-box {
-            margin-top: 30px;
-            padding: 15px;
-            border: 1px dashed rgba(0, 255, 204, 0.5);
-            background: rgba(0, 255, 204, 0.02);
-        }
-
-        .status-header {
-            color: var(--magenta);
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-text {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.5;
-        }
-
-        /* Декор в углах */
-        .corner {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--cyan);
-        }
-        .top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-
+        .status-header { color: var(--magenta); font-size: 0.9rem; margin-bottom: 8px; font-weight: bold; letter-spacing: 1px; }
+        .status-text { font-size: 0.8rem; color: rgba(255, 255, 255, 0.6); line-height: 1.5; }
     </style>
 </head>
 <body>
 
     <div id="particles-js"></div>
+    <div id="nft-container"></div>
 
     <div class="terminal">
-        <div class="corner top-left"></div>
-        <div class="corner bottom-right"></div>
-
-        <h1 class="glitch" data-text="WINS">WINS</h1>
-
-        <a href="https://t.me/winstrac" class="nav-link">Contact DM</a>
-        <a href="https://t.me/winsablen" class="nav-link">Main Channel</a>
-        <a href="https://t.me/coxozy_" class="nav-link">Feedbacks</a>
+        <h1 class="glitch">WINS</h1>
+        
+        <a href="https://t.me/winstrac" onclick="closeApp()" class="nav-link">Contact DM</a>
+        <a href="https://t.me/winsablen" onclick="closeApp()" class="nav-link">Main Channel</a>
+        <a href="https://t.me/coxozy" onclick="closeApp()" class="nav-link">Feedbacks</a>
 
         <div class="status-box">
-            <div class="status-header">
-                <span>[</span> ⚡ TRUSTED GUARANTOR ⚡ <span>]</span>
-            </div>
-            <p class="status-text">
-                Официальный гарант сети. <br>
-                Проведение сделок через @winstrac гарантирует сохранность ваших активов.
-            </p>
+            <div class="status-header">🛡 TRUSTED GUARANTOR 🛡</div>
+            <p class="status-text">Официальный гарант сети. Проведение сделок через @winstrac гарантирует полную сохранность ваших активов.</p>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
+        // Функция сворачивания WebApp в Telegram после клика
+        function closeApp() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                // Небольшая задержка, чтобы переход по ссылке успел сработать
+                setTimeout(() => {
+                    window.Telegram.WebApp.close();
+                }, 200);
+            }
+        }
+
+        // Фон: Частицы
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 80 },
                 "color": { "value": "#00FFCC" },
                 "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 2, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00FFCC", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "out_mode": "out" }
-            },
-            "interactivity": {
-                "events": { "onhover": { "enable": true, "mode": "bubble" } },
-                "modes": { "bubble": { "distance": 200, "size": 4, "duration": 2, "opacity": 0.8, "speed": 3 } }
+                "opacity": { "value": 0.2 },
+                "size": { "value": 2 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00FFCC", "opacity": 0.1 },
+                "move": { "enable": true, "speed": 1.2 }
             }
         });
+
+        // Фон: Падающие NFT (Pepe, Durov Cap и др.)
+        const nftImages = [
+            'https://fragment.com/img/gifts/pepe_the_frog.png',
+            'https://fragment.com/img/gifts/durov_cap.png',
+            'https://fragment.com/img/gifts/moon_pendant.png',
+            'https://fragment.com/img/gifts/doge.png',
+            'https://fragment.com/img/gifts/white_rabbit.png'
+        ];
+
+        const nftContainer = document.getElementById('nft-container');
+
+        function createFallingNFT() {
+            const nft = document.createElement('div');
+            nft.classList.add('falling-nft');
+            
+            const randomImg = nftImages[Math.floor(Math.random() * nftImages.length)];
+            nft.style.backgroundImage = `url('${randomImg}')`;
+            nft.style.left = Math.random() * 100 + 'vw';
+            nft.style.animationDuration = Math.random() * 4 + 4 + 's';
+            
+            nftContainer.appendChild(nft);
+
+            nft.addEventListener('animationend', () => {
+                nft.remove();
+            });
+        }
+
+        // Генерация подарка каждые 600 мс
+        setInterval(createFallingNFT, 600);
     </script>
 </body>
 </html>
