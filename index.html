@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WINS HUB | CLOUD EDITION</title>
+    <title>WINS HUB | SKY EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { 
-            --accent: #27ae60; 
+            --accent: #3498db; 
             --dark: #2c3e50; 
-            --soft-bg: #f8f9fa; 
-            --border-clr: rgba(44, 62, 80, 0.15);
+            --sky-blue: #e3f2fd; /* Нежно-голубой цвет фона */
+            --glass: rgba(255, 255, 255, 0.65); /* Повышенная прозрачность */
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         
         body { 
-            background: var(--soft-bg); 
+            background: linear-gradient(180deg, var(--sky-blue) 0%, #bbdefb 100%); 
             color: var(--dark); 
             font-family: 'Share Tech Mono', monospace; 
             height: 100vh; 
@@ -28,17 +28,17 @@
             position: relative; 
         }
 
-        /* Облака сверху */
+        /* Облака */
         .clouds {
             position: absolute;
-            top: -20px;
+            top: -30px;
             width: 200%;
-            height: 150px;
-            background: radial-gradient(circle, #fff 20%, transparent 70%);
-            background-size: 200px 100px;
-            opacity: 0.8;
-            filter: blur(20px);
-            animation: moveClouds 20s linear infinite;
+            height: 180px;
+            background: radial-gradient(circle, #fff 15%, transparent 60%);
+            background-size: 250px 120px;
+            opacity: 0.7;
+            filter: blur(25px);
+            animation: moveClouds 25s linear infinite;
             z-index: 2;
         }
 
@@ -52,8 +52,8 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 120px;
-            background: linear-gradient(to top, #ffffff, transparent);
+            height: 150px;
+            background: linear-gradient(to top, rgba(255,255,255,0.9), transparent);
             z-index: 4;
             pointer-events: none;
         }
@@ -62,98 +62,122 @@
 
         .falling-nft {
             position: absolute;
-            font-size: 32px;
-            filter: opacity(0.5);
+            font-size: 34px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
+            opacity: 0.6;
             animation: fall linear forwards;
         }
 
         @keyframes fall {
-            0% { transform: translateY(50px) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.5; }
-            90% { opacity: 0.5; }
+            0% { transform: translateY(30px) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.6; }
+            85% { opacity: 0.6; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Основной блок */
+        /* Стеклянный основной блок */
         .terminal { 
             position: relative; 
             z-index: 10; 
-            width: 90%; 
+            width: 92%; 
             max-width: 380px; 
-            background: rgba(255, 255, 255, 0.9); 
-            border: 2px solid var(--dark); 
-            border-radius: 35px; 
-            padding: 45px 25px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05), 0 0 0 10px rgba(255,255,255,0.5); 
+            background: var(--glass); 
+            border: 2px solid rgba(255, 255, 255, 0.8); 
+            border-radius: 40px; 
+            padding: 40px 25px; 
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1), 
+                        inset 0 0 15px rgba(255,255,255,0.5); 
             text-align: center; 
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px); /* Эффект матового стекла */
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Декоративный контур */
+        .terminal::after {
+            content: "";
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 45px;
+            pointer-events: none;
         }
 
         .floating-orb {
-            width: 70px;
-            height: 70px;
-            background: var(--dark);
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(45deg, var(--dark), var(--accent));
             margin: 0 auto 25px;
             clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            animation: rotateOrb 5s infinite linear;
-            border: 2px solid var(--accent);
+            animation: rotateOrb 6s infinite ease-in-out;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
         }
 
         @keyframes rotateOrb {
-            from { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
-            to { transform: rotate(360deg) scale(1); }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.15); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         .username {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             color: var(--dark);
             margin-bottom: 30px;
-            letter-spacing: 4px;
+            letter-spacing: 5px;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
         }
 
         .nav-link { 
             display: block; 
             margin: 15px 0; 
-            padding: 20px; 
+            padding: 18px; 
             text-decoration: none; 
-            color: var(--dark); 
-            background: transparent; 
-            border: 2px solid var(--dark); 
+            color: #fff; 
+            background: var(--dark); 
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px; 
-            font-size: 0.95rem; 
+            font-size: 1rem; 
             font-weight: bold;
             text-transform: uppercase; 
             letter-spacing: 2px; 
-            transition: 0.3s ease; 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
         }
 
         .nav-link:hover { 
-            background: var(--dark); 
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            background: var(--accent); 
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
         }
 
         .status-box { 
             margin-top: 35px; 
-            padding: 15px; 
-            background: #fff; 
-            border-radius: 20px;
-            border: 1px solid var(--border-clr);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            padding: 18px; 
+            background: rgba(255, 255, 255, 0.5); 
+            border-radius: 25px;
+            border: 1px solid var(--accent);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
-        .status-header { color: var(--accent); font-size: 0.8rem; margin-bottom: 5px; font-weight: bold; letter-spacing: 1px; }
-        .status-text { font-size: 0.75rem; color: #95a5a6; line-height: 1.6; }
+        .status-header { 
+            color: var(--accent); 
+            font-size: 0.85rem; 
+            margin-bottom: 6px; 
+            font-weight: bold; 
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .status-text { font-size: 0.8rem; color: #5d6d7e; line-height: 1.6; }
     </style>
 </head>
 <body>
 
     <div class="clouds"></div>
-    <div class="fog"></div>
     <div id="nft-container"></div>
+    <div class="fog"></div>
 
     <div class="terminal">
         <div class="floating-orb"></div>
@@ -164,8 +188,8 @@
         <a href="https://t.me/coxozy" onclick="closeApp()" class="nav-link">База отзывов</a>
 
         <div class="status-box">
-            <div class="status-header">● SECURE GUARANTOR ●</div>
-            <p class="status-text">Официальный сервис сделок. Пользуйтесь @winstrac для защиты ваших переводов.</p>
+            <div class="status-header">✦ SECURE GUARANTOR ✦</div>
+            <p class="status-text">Официальный сервис сделок. Пользуйтесь @winstrac для полной защиты ваших активов.</p>
         </div>
     </div>
 
@@ -176,7 +200,7 @@
             }
         }
 
-        const nftItems = ['🐸', '🧢', '💎', '🔮', '🏆', '⭐'];
+        const nftItems = ['🐸', '🧢', '💎', '🔮', '🏆', '⭐', '🎁'];
         const nftContainer = document.getElementById('nft-container');
 
         function createFallingNFT() {
@@ -184,15 +208,16 @@
             nft.className = 'falling-nft';
             nft.innerHTML = nftItems[Math.floor(Math.random() * nftItems.length)];
             nft.style.left = Math.random() * 95 + 'vw';
-            // Падение начинается сверху облаков
-            nft.style.top = "-50px"; 
-            const duration = Math.random() * 4 + 4;
+            nft.style.top = "-60px"; 
+            
+            const duration = Math.random() * 4 + 5; // Чуть медленнее для атмосферы
             nft.style.animationDuration = duration + 's';
+            
             nftContainer.appendChild(nft);
             setTimeout(() => { nft.remove(); }, duration * 1000);
         }
 
-        setInterval(createFallingNFT, 700);
+        setInterval(createFallingNFT, 650);
     </script>
 </body>
 </html>
