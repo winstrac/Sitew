@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WINS HUB | SOFT PREMIUM</title>
+    <title>WINS HUB | CLOUD EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { 
-            --accent: #2ecc71; 
+            --accent: #27ae60; 
             --dark: #2c3e50; 
-            --soft-bg: #f4f7f6; 
+            --soft-bg: #f8f9fa; 
+            --border-clr: rgba(44, 62, 80, 0.15);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
@@ -27,72 +28,89 @@
             position: relative; 
         }
 
-        /* Эффект сетки на фоне */
-        body::before {
-            content: "";
+        /* Облака сверху */
+        .clouds {
             position: absolute;
-            width: 200%; height: 200%;
-            background-image: linear-gradient(#e0e0e0 1px, transparent 1px), linear-gradient(90deg, #e0e0e0 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: rotate(15deg);
-            top: -50%; left: -50%;
-            z-index: 0;
-            opacity: 0.3;
+            top: -20px;
+            width: 200%;
+            height: 150px;
+            background: radial-gradient(circle, #fff 20%, transparent 70%);
+            background-size: 200px 100px;
+            opacity: 0.8;
+            filter: blur(20px);
+            animation: moveClouds 20s linear infinite;
+            z-index: 2;
         }
 
-        #nft-container { position: absolute; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        @keyframes moveClouds {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* Туман снизу */
+        .fog {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(to top, #ffffff, transparent);
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        #nft-container { position: absolute; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
 
         .falling-nft {
             position: absolute;
-            font-size: 30px;
-            filter: grayscale(30%) opacity(0.5);
+            font-size: 32px;
+            filter: opacity(0.5);
             animation: fall linear forwards;
         }
 
         @keyframes fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.5; }
-            80% { opacity: 0.5; }
+            0% { transform: translateY(50px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Подвижный элемент сверху */
-        .floating-orb {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent), #27ae60);
-            margin: 0 auto 20px;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            animation: pulse-rotate 4s infinite ease-in-out;
-            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
-        }
-
-        @keyframes pulse-rotate {
-            0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
-            50% { transform: scale(1.15) rotate(180deg); filter: hue-rotate(45deg); }
-            100% { transform: scale(1) rotate(360deg); filter: hue-rotate(0deg); }
-        }
-
+        /* Основной блок */
         .terminal { 
             position: relative; 
             z-index: 10; 
             width: 90%; 
             max-width: 380px; 
-            background: rgba(255, 255, 255, 0.85); 
-            border: 1px solid rgba(255, 255, 255, 0.4); 
-            border-radius: 40px; 
-            padding: 40px 25px; 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05); 
+            background: rgba(255, 255, 255, 0.9); 
+            border: 2px solid var(--dark); 
+            border-radius: 35px; 
+            padding: 45px 25px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05), 0 0 0 10px rgba(255,255,255,0.5); 
             text-align: center; 
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-orb {
+            width: 70px;
+            height: 70px;
+            background: var(--dark);
+            margin: 0 auto 25px;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation: rotateOrb 5s infinite linear;
+            border: 2px solid var(--accent);
+        }
+
+        @keyframes rotateOrb {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
         }
 
         .username {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--dark);
-            margin-bottom: 25px;
-            letter-spacing: 3px;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
         }
 
         .nav-link { 
@@ -100,49 +118,54 @@
             margin: 15px 0; 
             padding: 20px; 
             text-decoration: none; 
-            color: #fff; 
-            background: var(--dark); 
+            color: var(--dark); 
+            background: transparent; 
+            border: 2px solid var(--dark); 
             border-radius: 20px; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             font-weight: bold;
             text-transform: uppercase; 
             letter-spacing: 2px; 
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transition: 0.3s ease; 
         }
 
         .nav-link:hover { 
-            background: var(--accent); 
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.2);
+            background: var(--dark); 
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         .status-box { 
-            margin-top: 30px; 
+            margin-top: 35px; 
             padding: 15px; 
-            background: rgba(46, 204, 113, 0.05); 
+            background: #fff; 
             border-radius: 20px;
-            border: 1px solid rgba(46, 204, 113, 0.2);
+            border: 1px solid var(--border-clr);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        .status-header { color: var(--accent); font-size: 0.85rem; margin-bottom: 5px; font-weight: bold; text-transform: uppercase; }
-        .status-text { font-size: 0.8rem; color: #7f8c8d; line-height: 1.5; }
+        .status-header { color: var(--accent); font-size: 0.8rem; margin-bottom: 5px; font-weight: bold; letter-spacing: 1px; }
+        .status-text { font-size: 0.75rem; color: #95a5a6; line-height: 1.6; }
     </style>
 </head>
 <body>
 
+    <div class="clouds"></div>
+    <div class="fog"></div>
     <div id="nft-container"></div>
 
     <div class="terminal">
         <div class="floating-orb"></div>
-        <h1 class="username">WINS ACCESS</h1>
+        <h1 class="username">WINS HUB</h1>
         
         <a href="https://t.me/winstrac" onclick="closeApp()" class="nav-link">Написать в ЛС</a>
         <a href="https://t.me/winsablen" onclick="closeApp()" class="nav-link">Наш Канал</a>
         <a href="https://t.me/coxozy" onclick="closeApp()" class="nav-link">База отзывов</a>
 
         <div class="status-box">
-            <div class="status-header">🛡 Secure Guarantor Service</div>
-            <p class="status-text">Официальное сопровождение сделок. Для защиты ваших средств работайте через @winstrac.</p>
+            <div class="status-header">● SECURE GUARANTOR ●</div>
+            <p class="status-text">Официальный сервис сделок. Пользуйтесь @winstrac для защиты ваших переводов.</p>
         </div>
     </div>
 
@@ -153,7 +176,7 @@
             }
         }
 
-        const nftItems = ['🐸', '🧢', '💎', '💰', '👑', '⚡'];
+        const nftItems = ['🐸', '🧢', '💎', '🔮', '🏆', '⭐'];
         const nftContainer = document.getElementById('nft-container');
 
         function createFallingNFT() {
@@ -161,13 +184,15 @@
             nft.className = 'falling-nft';
             nft.innerHTML = nftItems[Math.floor(Math.random() * nftItems.length)];
             nft.style.left = Math.random() * 95 + 'vw';
-            const duration = Math.random() * 5 + 5;
+            // Падение начинается сверху облаков
+            nft.style.top = "-50px"; 
+            const duration = Math.random() * 4 + 4;
             nft.style.animationDuration = duration + 's';
             nftContainer.appendChild(nft);
             setTimeout(() => { nft.remove(); }, duration * 1000);
         }
 
-        setInterval(createFallingNFT, 800);
+        setInterval(createFallingNFT, 700);
     </script>
 </body>
 </html>
